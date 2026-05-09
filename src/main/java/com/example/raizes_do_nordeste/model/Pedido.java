@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,17 +20,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
+
 
 @Entity
 @Table(name = "pedidos")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "itens") // Evita recursão infinita na impressão dos itens do pedido
 public class Pedido {
 
     @Id
@@ -59,10 +62,11 @@ public class Pedido {
     // Relacionamento Um-para-Muitos: Um pedido tem vários itens
     // mappedBy indica que o mapeamento é feito pelo campo 'pedido' na classe ItemPedido
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true) // cascade para persistir itens junto com o pedido, orphanRemoval para remover itens órfãos
     private List<ItemPedido> itens;
 
-    enum StatusPedido{
+    public enum StatusPedido{
         CRIADO,
         AGUARDANDO_PAGAMENTO,
         PREPARANDO,
