@@ -71,7 +71,7 @@ public class Pedido {
         CANCELADO
     }
 
-    enum CanalPedido{
+    public enum CanalPedido{
         APP, TOTEM, BALCAO, PICKUP, WEB
     }
 
